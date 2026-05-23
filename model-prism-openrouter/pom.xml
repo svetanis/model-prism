@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.svetanis</groupId>
+        <artifactId>model-prism</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>model-prism-openrouter</artifactId>
+    <name>Model Prism OpenRouter</name>
+    <description>
+        OpenRouter Provider JAR. Drop this on the classpath
+        and OpenRouterModelProvider auto-registers via
+        META-INF/services - no code changes required.
+        Supports model names matching "openrouter/*".
+    </description>
+
+    <dependencies>
+        <!-- Google ADK core -->
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk</artifactId>
+        </dependency>
+
+        <!-- Model Prism Core (SPI + OpenAiCompatibleLlm) -->
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-core</artifactId>
+        </dependency>
+
+        <!-- Jakarta Dependency Injection -->
+        <!-- Source: https://mvnrepository.com/artifact/jakarta.inject/jakarta.inject-api -->
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Apache Commons Lang -->
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
