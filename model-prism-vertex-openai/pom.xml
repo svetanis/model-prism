@@ -11,15 +11,29 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>model-prism-core</artifactId>
-    <name>Model Prism Core</name>
-    <description>ModelProvider SPI + OpenAI-compatible base LLM for Google ADK Java</description>
+    <artifactId>model-prism-vertex-openai</artifactId>
+    <name>Model Prism Vertex OpenAI</name>
+    <description>
+		Vertex AI provider through Google's OpenAI-compatible
+		chat-completions endpoint. 
+		Activated when agent.model starts with "vertex-openai/"
+		(e.g. "vertex-openai/google/gemini-2.5-flash" or 
+		"vertex-openai/meta/llama").
+		Auth via short-lived OAuth2 access tokens minted from
+		Application Default Credentials.
+    </description>
 
     <dependencies>
         <!-- Google ADK core -->
         <dependency>
             <groupId>com.google.adk</groupId>
             <artifactId>google-adk</artifactId>
+        </dependency>
+
+        <!-- Model Prism Core (SPI + OpenAiCompatibleLlm) -->
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-core</artifactId>
         </dependency>
 		
         <dependency>
@@ -48,33 +62,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

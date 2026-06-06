@@ -11,9 +11,18 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>model-prism-core</artifactId>
-    <name>Model Prism Core</name>
-    <description>ModelProvider SPI + OpenAI-compatible base LLM for Google ADK Java</description>
+    <artifactId>model-prism-vertex-gemini</artifactId>
+    <name>Model Prism Vertex Gemini</name>
+    <description>
+		Vertex AI Gemini provider - native google-genai SDK path
+		(NOT OpenAI-compatible REST).
+		Activated when agent.model starts with "vertex-gemini/"
+		(e.g. "vertex-gemini/gemini-2.5-flash").
+		Auth via Application Default Credentials. Requires 
+		GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION evn vars.
+		Sets GOOGLE_GENAI_USE_VERTEXAI=true internally for the 
+		underlying google-genai SDK.
+    </description>
 
     <dependencies>
         <!-- Google ADK core -->
@@ -21,12 +30,12 @@
             <groupId>com.google.adk</groupId>
             <artifactId>google-adk</artifactId>
         </dependency>
-		
+
+        <!-- Model Prism Core (SPI + OpenAiCompatibleLlm) -->
         <dependency>
-            <groupId>com.google.auth</groupId>
-            <artifactId>google-auth-library-oauth2-http</artifactId>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-core</artifactId>
         </dependency>
-		
 
         <!-- Jakarta Dependency Injection -->
         <!-- Source: https://mvnrepository.com/artifact/jakarta.inject/jakarta.inject-api -->
@@ -48,33 +57,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

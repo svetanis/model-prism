@@ -25,6 +25,8 @@
         <module>model-prism-ollama</module>
         <module>model-prism-openrouter</module>
         <module>model-prism-demo</module>
+        <module>model-prism-vertex-gemini</module>
+        <module>model-prism-vertex-openai</module>
     </modules>
 
     <properties>
@@ -47,6 +49,10 @@
 
         <!-- Jakarta -->
         <jakarta.inject.version>2.0.1</jakarta.inject.version>
+
+        <!-- Guava -->
+        <guava.version>33.6.0-jre</guava.version>
+		<google.auth>1.30.0</google.auth>
 
         <!-- Apache Commons -->
         <commons.lang3.version>3.20.0</commons.lang3.version>
@@ -76,6 +82,14 @@
                 <artifactId>google-adk-dev</artifactId>
                 <version>${google.adk.version}</version>
             </dependency>
+			
+					
+            <dependency>
+                <groupId>com.google.auth</groupId>
+                <artifactId>google-auth-library-oauth2-http</artifactId>
+			    <version>${google.auth}</version>
+            </dependency>
+
 
             <!-- Inter-module dependencies -->
             <dependency>
@@ -113,6 +127,14 @@
                 <groupId>jakarta.inject</groupId>
                 <artifactId>jakarta.inject-api</artifactId>
                 <version>${jakarta.inject.version}</version>
+            </dependency>
+
+            <!-- Guava -->
+            <!-- Source: https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- Apache Commons Lang -->
