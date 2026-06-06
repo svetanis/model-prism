@@ -2,6 +2,9 @@ package com.github.svetanis.models.spi;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import com.github.svetanis.base.http.DefaultOpenAiHttpClient;
 import com.github.svetanis.base.http.OpenAiHttpClient;
 import com.github.svetanis.base.serializer.DefaultOpenAiMessageSerializer;
@@ -10,10 +13,9 @@ import com.google.adk.models.BaseLlm;
 import com.google.adk.models.BaseLlmConnection;
 import com.google.adk.models.LlmRequest;
 import com.google.adk.models.LlmResponse;
+
 import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Flowable;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Base class for any OpenAI-compatible chat completion API (Groq, Ollama, OpenRouter, Together AI,
@@ -48,7 +50,7 @@ public class OpenAiCompatibleLlm extends BaseLlm {
         new DefaultOpenAiMessageSerializer());
   }
 
-  protected OpenAiCompatibleLlm(
+  public OpenAiCompatibleLlm(
       String modelName, OpenAiHttpClient httpClient, OpenAiMessageSerializer serializer) {
     super(checkNotNull(modelName, "modelName"));
     this.httpClient = checkNotNull(httpClient, "httpClient");
