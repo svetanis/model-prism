@@ -83,7 +83,14 @@ No code changes ever.
 The two approaches are **complementary**. Use the LangChain4j bridge for providers outside the OpenAI-compatible REST space (Anthropic, Cohere, etc.);
 use this proposed solution for the common case where you want zero-boilerplate model name strings and classpath-driven discovery. 
 
+### Why Custom Serialization vs. Native ADK `ChatCompletionsHttpClient`?
 
+ADK 1.4.0 introduced `ChatCompletionsHttpClient`, a native utility that fuses HTTP transport and OpenAI JSON mapping into a single pipeline. We provide an example wrapper for it in `AdkNativeOpenAiLlm`, but **it is not wired by default.**
+
+Instead, `model-prism` relies on its custom `OpenAiCompatibleLlm` and `OpenAiMessageSerializer`. Why?
+
+**Strict JSON Schema Compliance:** 
+When translating tool definitions, the native ADK JSON serializer outputs uppercase schema types (e.g., `"type": "STRING"`). While Gemini is lenient, strict OpenAI-compatible providers (like Groq) strictly enforce the JSON Schema standard (which requires lowercase types like `"string"`) and reject ADK's uppercase output with an HTTP 400 Bad Request. Our custom `OpenAiRequestMapper` implements a fix that normalizes schema types to lowercase, ensuring flawless compatibility across strict and lenient providers alike.
 
 ---
 

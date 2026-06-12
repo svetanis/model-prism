@@ -40,7 +40,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Google ADK -->
-        <google.adk.version>1.2.0</google.adk.version>
+        <google.adk.version>1.4.0</google.adk.version>
 
         <!-- Jackson -->
         <!-- Jackson — must align with the jackson-annotations version that

@@ -125,7 +125,7 @@ class OpenAiRequestMapper {
       if (obj.has("type")) {
         obj.put("type", obj.get("type").asText().toLowerCase());
       }
-      obj.fields().forEachRemaining(entry -> normalizeSchemaTypes(entry.getValue()));
+      obj.properties().forEach(entry -> normalizeSchemaTypes(entry.getValue()));
     } else if (node.isArray()) {
       node.forEach(child -> normalizeSchemaTypes(child));
     }

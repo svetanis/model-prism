@@ -113,6 +113,10 @@ protected OpenAiCompatibleLlm(String modelName,
 | Non-streaming | `generateContent(request, false)` - single `LlmResponse` |
 | SSE token streaming | `generateContent(request, true)` - `Flowable` of partial responses |
 
+### Why Custom Serialization?
+
+While ADK 1.4.0 introduced `ChatCompletionsHttpClient` to natively fuse HTTP transport and JSON mapping, we explicitly provide and default to our custom `OpenAiMessageSerializer`. The native ADK serializer generates uppercase JSON Schema types (e.g., `"type": "STRING"`), which strict OpenAI-compatible providers like Groq reject with an HTTP 400 Bad Request. Our custom `OpenAiRequestMapper` normalizes these types to standard lowercase strings, guaranteeing compatibility across all providers. (We provide `AdkNativeOpenAiLlm` as an unwired example for comparison).
+
 ---
 
 ## Dependency
