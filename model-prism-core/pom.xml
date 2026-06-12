@@ -22,10 +22,7 @@
             <artifactId>google-adk</artifactId>
         </dependency>
 		
-        <dependency>
-            <groupId>com.google.auth</groupId>
-            <artifactId>google-auth-library-oauth2-http</artifactId>
-        </dependency>
+
 		
 
         <!-- Jakarta Dependency Injection -->

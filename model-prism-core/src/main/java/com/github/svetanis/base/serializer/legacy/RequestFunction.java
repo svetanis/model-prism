@@ -1,27 +1,27 @@
-package com.github.svetanis.base.serializer;
+package com.github.svetanis.base.serializer.legacy;
 
-import static com.github.svetanis.base.serializer.SerializerUtils.ARGUMENTS;
-import static com.github.svetanis.base.serializer.SerializerUtils.ASSISTANT;
-import static com.github.svetanis.base.serializer.SerializerUtils.CALL_0;
-import static com.github.svetanis.base.serializer.SerializerUtils.CONTENT;
-import static com.github.svetanis.base.serializer.SerializerUtils.DESCRIPTION;
-import static com.github.svetanis.base.serializer.SerializerUtils.FUNCTION;
-import static com.github.svetanis.base.serializer.SerializerUtils.ID;
-import static com.github.svetanis.base.serializer.SerializerUtils.MAPPER;
-import static com.github.svetanis.base.serializer.SerializerUtils.MESSAGES;
-import static com.github.svetanis.base.serializer.SerializerUtils.MODEL;
-import static com.github.svetanis.base.serializer.SerializerUtils.NAME;
-import static com.github.svetanis.base.serializer.SerializerUtils.OBJECT;
-import static com.github.svetanis.base.serializer.SerializerUtils.PARAMETERS;
-import static com.github.svetanis.base.serializer.SerializerUtils.ROLE;
-import static com.github.svetanis.base.serializer.SerializerUtils.STREAM;
-import static com.github.svetanis.base.serializer.SerializerUtils.SYSTEM;
-import static com.github.svetanis.base.serializer.SerializerUtils.TOOL;
-import static com.github.svetanis.base.serializer.SerializerUtils.TOOLS;
-import static com.github.svetanis.base.serializer.SerializerUtils.TOOL_CALLS;
-import static com.github.svetanis.base.serializer.SerializerUtils.TOOL_CALL_ID;
-import static com.github.svetanis.base.serializer.SerializerUtils.TYPE;
-import static com.github.svetanis.base.serializer.SerializerUtils.USER;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.ARGUMENTS;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.ASSISTANT;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.CALL_0;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.CONTENT;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.DESCRIPTION;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.FUNCTION;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.ID;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.MAPPER;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.MESSAGES;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.MODEL;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.NAME;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.OBJECT;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.PARAMETERS;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.ROLE;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.STREAM;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.SYSTEM;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.TOOL;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.TOOLS;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.TOOL_CALLS;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.TOOL_CALL_ID;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.TYPE;
+import static com.github.svetanis.base.serializer.legacy.SerializerUtils.USER;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -38,8 +38,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public final class RequestFunction implements Function<LlmRequest, String> {
+/**
+ * Converts an ADK {@link LlmRequest} into an OpenAI chat-completions JSON request body.
+ *
+ * <p>Implements {@link Function}{@code <LlmRequest, String>} so it can be used inline
+ * with functional pipelines. Handles system instructions, user/assistant/tool messages,
+ * function call parts, function response parts, and tool declarations.
+ *
+ * @see ResponseFunction
+ * @see DefaultOpenAiMessageSerializer
+ */
+@Deprecated public final class RequestFunction implements Function<LlmRequest, String> {
 
+  /**
+   * Creates a new request serializer.
+   *
+   * @param modelName the bare model identifier (without provider prefix) to embed
+   *                  in the JSON {@code model} field
+   * @param stream    {@code true} to include {@code "stream": true} in the payload
+   */
   public RequestFunction(String modelName, boolean stream) {
     this.stream = stream;
     this.modelName = checkNotNull(modelName, "modelName");
@@ -48,6 +65,13 @@ public final class RequestFunction implements Function<LlmRequest, String> {
   private final boolean stream;
   private final String modelName;
 
+  /**
+   * Serializes the given {@link LlmRequest} into an OpenAI-format JSON string.
+   *
+   * @param request the ADK request containing messages, tools, and system instructions
+   * @return a JSON string suitable for posting to a chat-completions endpoint
+   * @throws IllegalArgumentException if serialization fails
+   */
   @Override
   public String apply(LlmRequest request) {
     try {
@@ -79,6 +103,12 @@ public final class RequestFunction implements Function<LlmRequest, String> {
     }
   }
 
+  /**
+   * Appends the parts of a {@link Content} message to the JSON messages array.
+   *
+   * <p>Dispatches to specialised handlers based on the part type:
+   * function-call parts, function-response parts, or plain text.
+   */
   private void appendContentParts(ArrayNode messages, String role, Content content)
       throws Exception {
     List<Part> parts = content.parts().orElse(List.of());
@@ -98,6 +128,9 @@ public final class RequestFunction implements Function<LlmRequest, String> {
     }
   }
 
+  /**
+   * Serializes function-response parts as OpenAI {@code tool}-role messages.
+   */
   private void appendResponseParts(ArrayNode messages, List<Part> responseParts) throws Exception {
     for (Part part : responseParts) {
       var fr = part.functionResponse().get();
@@ -109,6 +142,10 @@ public final class RequestFunction implements Function<LlmRequest, String> {
     }
   }
 
+  /**
+   * Serializes function-call parts as an {@code assistant} message with
+   * a {@code tool_calls} array.
+   */
   private void appendCallParts(ArrayNode messages, List<Part> callParts) throws Exception {
     ObjectNode msg = messages.addObject();
     msg.put(ROLE, ASSISTANT);
@@ -124,6 +161,10 @@ public final class RequestFunction implements Function<LlmRequest, String> {
     }
   }
 
+  /**
+   * Converts a {@link FunctionDeclaration} into an OpenAI-format tool declaration
+   * and appends it to the tools array.
+   */
   private void appendToolDeclaration(ArrayNode toolsArray, FunctionDeclaration decl) {
     try {
       ObjectNode node = toolsArray.addObject().put(TYPE, FUNCTION).putObject(FUNCTION);
@@ -140,6 +181,12 @@ public final class RequestFunction implements Function<LlmRequest, String> {
     }
   }
 
+  /**
+   * Recursively normalises JSON Schema {@code type} fields to lowercase.
+   *
+   * <p>Some SDKs emit {@code "STRING"} or {@code "Integer"} — the OpenAI API
+   * expects lowercase ({@code "string"}, {@code "integer"}).
+   */
   private JsonNode normalizeSchemaTypes(JsonNode node) {
     if (node.isObject()) {
       ObjectNode obj = (ObjectNode) node;

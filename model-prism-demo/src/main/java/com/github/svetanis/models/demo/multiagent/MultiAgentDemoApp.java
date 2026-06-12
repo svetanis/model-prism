@@ -10,6 +10,16 @@ import com.github.svetanis.models.spi.ModelProvider;
 import com.github.svetanis.models.spi.ModelProviderRegistry;
 import java.util.List;
 
+/**
+ * Demo application for the multi-agent content-creation pipeline.
+ *
+ * <p>Orchestrates a {@link SequentialAgent} pipeline: a researcher agent gathers facts
+ * via Google Search, then a writer and critic iterate in a {@link com.google.adk.agents.LoopAgent}
+ * to produce a polished article. Events from all agents are printed with role-specific labels.
+ *
+ * @see ContentPipelineProvider
+ * @see RefinementLoopProvider
+ */
 public final class MultiAgentDemoApp {
 
   // to be wired via application.properties, e.g.

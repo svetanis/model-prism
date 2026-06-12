@@ -12,6 +12,16 @@ import java.util.List;
 
 // mvn exec:java -Dexec.mainClass=com.github.svetanis.models.demo.structured.StructuredDemoApp
 
+/**
+ * Demo application for structured (schema-constrained) output from a model-prism provider.
+ *
+ * <p>Feeds a free-text movie description to an agent configured with a JSON output schema
+ * (title, director, year, genre, summary). The LLM response is constrained to the schema,
+ * producing machine-readable structured data from unstructured input.
+ *
+ * @see MovieExtractorProvider
+ * @see MovieSchemaProvider
+ */
 public final class StructuredOutputDemoApp {
 
   // to be wired via application.properties, e.g.

@@ -25,6 +25,8 @@
         <module>model-prism-ollama</module>
         <module>model-prism-openrouter</module>
         <module>model-prism-demo</module>
+        <module>model-prism-web</module>
+        <module>model-prism-vertex-common</module>
         <module>model-prism-vertex-gemini</module>
         <module>model-prism-vertex-openai</module>
     </modules>

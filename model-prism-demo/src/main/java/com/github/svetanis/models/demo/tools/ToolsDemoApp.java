@@ -12,6 +12,17 @@ import com.google.adk.tools.FunctionTool;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Demo application for ADK function-calling (tool use) with a model-prism provider.
+ *
+ * <p>Equips an agent with three tools ({@code getCurrentTime}, {@code getWeather},
+ * {@code calculate}) and sends a prompt that requires all three to be invoked.
+ * This validates the full tool-calling round-trip: request serialization with
+ * tool declarations → model response with tool calls → tool execution →
+ * function-response serialization → final model answer.
+ *
+ * @see DemoTools
+ */
 public final class ToolsDemoApp {
 
   // to be wired via application.properties, e.g.

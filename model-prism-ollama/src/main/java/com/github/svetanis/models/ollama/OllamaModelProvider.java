@@ -20,21 +20,21 @@ import com.github.svetanis.models.spi.OpenAiCompatibleLlm;
  */
 public class OllamaModelProvider implements ModelProvider {
 
+  /** No-arg constructor required by {@link java.util.ServiceLoader}. */
   public OllamaModelProvider() {}
 
-  private static final String DEFAULT_BASE_URL = "http://localhost:11434";
-  private static final String PREFIX = "ollama/";
-
   @Override
-  public String modelPattern() {
-    return "ollama/.*";
+  public String prefix() {
+    return "ollama";
   }
 
+  private static final String DEFAULT_BASE_URL = "http://localhost:11434";
+
+  /** {@inheritDoc} */
   @Override
-  public BaseLlm create(String modelName) {
-    String model = modelName.startsWith(PREFIX) ? modelName.substring(PREFIX.length()) : modelName;
+  public BaseLlm createFromBareModelName(String bareModelName) {
     String baseUrl = System.getenv().getOrDefault("OLLAMA_BASE_URL", DEFAULT_BASE_URL);
     String apiUrl = baseUrl.replaceAll("/$", "") + "/v1/chat/completions";
-    return new OpenAiCompatibleLlm(model, apiUrl, empty());
+    return new OpenAiCompatibleLlm(bareModelName, apiUrl, empty());
   }
 }

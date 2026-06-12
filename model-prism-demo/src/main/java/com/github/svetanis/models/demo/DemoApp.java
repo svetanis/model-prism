@@ -10,6 +10,18 @@ import java.util.List;
 
 // mvn exec:java -Dexec.mainClass=com.github.svetanis.models.demo.DemoApp
 
+/**
+ * Minimal single-turn demo showing how to wire model-prism into an ADK agent.
+ *
+ * <p>Demonstrates the basic lifecycle:
+ * <ol>
+ *   <li>{@link ModelProviderRegistry#registerAll()} discovers all providers on the classpath.</li>
+ *   <li>An {@link LlmAgent} is built with a prefixed model name (e.g. {@code "groq/llama-3.1-8b-instant"}).</li>
+ *   <li>The agent is run with a simple prompt and the response is printed to stdout.</li>
+ * </ol>
+ *
+ * @see DemoRunner
+ */
 public final class DemoApp {
 
   // to be wired via application.properties, e.g.

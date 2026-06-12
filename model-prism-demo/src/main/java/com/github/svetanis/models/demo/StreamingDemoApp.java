@@ -11,6 +11,18 @@ import com.github.svetanis.models.spi.ModelProviderRegistry;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * SSE streaming demo showing token-by-token output from a model-prism provider.
+ *
+ * <p>Runs a creative writing agent in {@link com.google.adk.agents.RunConfig.StreamingMode#SSE}
+ * mode. Each partial token is printed as it arrives, followed by a summary of the total
+ * partial events received. This validates the streaming path through
+ * {@link com.github.svetanis.models.spi.OpenAiCompatibleLlm} and
+ * {@link com.github.svetanis.base.serializer.DefaultOpenAiMessageSerializer#processStreamLines}.
+ *
+ * @see DemoRunner#runStreaming
+ * @see DemoRunner#printStreamingEvent
+ */
 public final class StreamingDemoApp {
 
   // to be wired via application.properties, e.g.

@@ -11,6 +11,16 @@ import com.google.adk.runner.InMemoryRunner;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Multi-turn session demo showing how ADK maintains conversation context across turns.
+ *
+ * <p>Demonstrates a travel planning assistant that remembers the user's name, destination,
+ * and preferences across three consecutive turns on the same session. This validates
+ * that the model-prism {@link com.github.svetanis.models.spi.OpenAiCompatibleLlm} correctly serializes and deserializes
+ * the growing message history.
+ *
+ * @see DemoRunner#runTurn
+ */
 public final class SessionDemoApp {
 
   // to be wired via application.properties, e.g.

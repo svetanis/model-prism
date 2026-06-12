@@ -43,6 +43,13 @@ import io.reactivex.rxjava3.core.Flowable;
  */
 public class OpenAiCompatibleLlm extends BaseLlm {
 
+  /**
+   * Convenience constructor that wires in default collaborators.
+   *
+   * @param modelName the bare model name (e.g. {@code "llama-3.1-8b-instant"})
+   * @param apiUrl    the full URL of the chat-completions endpoint
+   * @param apiKey    optional API key; if empty, no {@code Authorization} header is sent
+   */
   public OpenAiCompatibleLlm(String modelName, String apiUrl, Optional<String> apiKey) {
     this(
         modelName,
@@ -50,6 +57,14 @@ public class OpenAiCompatibleLlm extends BaseLlm {
         new DefaultOpenAiMessageSerializer());
   }
 
+  /**
+   * Injection constructor accepting custom collaborators, useful for subclasses
+   * and unit tests.
+   *
+   * @param modelName  the bare model name
+   * @param httpClient the HTTP transport to use
+   * @param serializer the message serializer/deserializer to use
+   */
   public OpenAiCompatibleLlm(
       String modelName, OpenAiHttpClient httpClient, OpenAiMessageSerializer serializer) {
     super(checkNotNull(modelName, "modelName"));
@@ -60,6 +75,13 @@ public class OpenAiCompatibleLlm extends BaseLlm {
   private final OpenAiHttpClient httpClient;
   private final OpenAiMessageSerializer serializer;
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>When {@code stream} is {@code true}, returns a {@link Flowable} that emits
+   * partial text tokens and a final assembled response. When {@code false}, returns
+   * a single-element {@link Flowable} with the complete response.
+   */
   @Override
   public Flowable<LlmResponse> generateContent(LlmRequest request, boolean stream) {
     if (stream) {
@@ -72,6 +94,9 @@ public class OpenAiCompatibleLlm extends BaseLlm {
         });
   }
 
+  /**
+   * Streams a request via SSE and emits partial/final responses.
+   */
   private Flowable<LlmResponse> streamContent(LlmRequest request) {
     return Flowable.create(
         emitter -> {
@@ -88,6 +113,13 @@ public class OpenAiCompatibleLlm extends BaseLlm {
         BackpressureStrategy.BUFFER);
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Live (bidirectional) streaming is not supported by OpenAI-compatible APIs.
+   *
+   * @throws UnsupportedOperationException always
+   */
   @Override
   public BaseLlmConnection connect(LlmRequest llmRequest) {
     throw new UnsupportedOperationException(

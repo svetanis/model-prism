@@ -18,20 +18,20 @@ import java.util.Optional;
  */
 public class OpenRouterModelProvider implements ModelProvider {
 
+  /** No-arg constructor required by {@link java.util.ServiceLoader}. */
   public OpenRouterModelProvider() {}
 
-  private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
-  private static final String PREFIX = "openrouter/";
-
   @Override
-  public String modelPattern() {
-    return "openrouter/.*";
+  public String prefix() {
+    return "openrouter";
   }
 
+  private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
+
+  /** {@inheritDoc} */
   @Override
-  public BaseLlm create(String modelName) {
+  public BaseLlm createFromBareModelName(String bareModelName) {
     Optional<String> apiKey = Optional.ofNullable(System.getenv("OPENROUTER_API_KEY"));
-    String model = modelName.startsWith(PREFIX) ? modelName.substring(PREFIX.length()) : modelName;
-    return new OpenAiCompatibleLlm(model, API_URL, apiKey);
+    return new OpenAiCompatibleLlm(bareModelName, API_URL, apiKey);
   }
 }

@@ -32,12 +32,12 @@ class ModelProviderRegistryTest {
   /** A real (non-mock) provider used to drive the ServiceLoader in tests. */
   public static final class GroqTestProvider implements ModelProvider {
     @Override
-    public String modelPattern() {
-      return "groq/.*";
+    public String prefix() {
+      return "groq";
     }
 
     @Override
-    public BaseLlm create(String modelName) {
+    public BaseLlm createFromBareModelName(String bareModelName) {
       throw new UnsupportedOperationException("not needed in unit tests");
     }
   }
@@ -45,12 +45,12 @@ class ModelProviderRegistryTest {
   /** A second real provider. */
   public static final class OllamaTestProvider implements ModelProvider {
     @Override
-    public String modelPattern() {
-      return "ollama/.*";
+    public String prefix() {
+      return "ollama";
     }
 
     @Override
-    public BaseLlm create(String modelName) {
+    public BaseLlm createFromBareModelName(String bareModelName) {
       throw new UnsupportedOperationException("not needed in unit tests");
     }
   }

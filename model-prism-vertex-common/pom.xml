@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.svetanis</groupId>
+        <artifactId>model-prism</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>model-prism-vertex-common</artifactId>
+    <name>Model Prism Vertex Common</name>
+    <description>
+		Common HTTP and authentication logic for Google Vertex AI models.
+		Provides Application Default Credentials (ADC) token generation.
+    </description>
+
+    <dependencies>
+        <!-- Model Prism Core (SPI + OpenAiHttpClient) -->
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-core</artifactId>
+        </dependency>
+
+        <!-- Apache Commons Lang -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!-- Google Auth Library -->
+        <dependency>
+            <groupId>com.google.auth</groupId>
+            <artifactId>google-auth-library-oauth2-http</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

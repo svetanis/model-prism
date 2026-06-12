@@ -7,6 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * {@link Provider} that builds a {@link Schema} defining the structure for extracted movie data.
+ *
+ * <p>The schema declares the following fields:
+ * <ul>
+ *   <li>{@code title} (string, required) — the movie title</li>
+ *   <li>{@code director} (string, required) — the director's full name</li>
+ *   <li>{@code year} (integer, required) — release year</li>
+ *   <li>{@code genre} (string, required) — primary genre</li>
+ *   <li>{@code summary} (string, required) — one-sentence plot summary</li>
+ *   <li>{@code character} (string, optional) — main character</li>
+ *   <li>{@code motivation} (string, optional) — main character's motivation</li>
+ * </ul>
+ *
+ * @see MovieExtractorProvider
+ */
 public final class MovieSchemaProvider implements Provider<Schema> {
 
   private static final String TITLE = "title";

@@ -9,6 +9,20 @@ import com.github.svetanis.models.spi.ModelProvider;
 import com.github.svetanis.models.spi.ModelProviderRegistry;
 import java.util.List;
 
+/**
+ * Demo application for ADK agent callbacks (before/after model and tool hooks).
+ *
+ * <p>Runs two scenarios:
+ * <ol>
+ *   <li><strong>Normal flow</strong> — asks for stock prices of AAPL and MSFT;
+ *       all callbacks fire and the tool returns mock prices.</li>
+ *   <li><strong>Guardrail block</strong> — asks for ticker "HACK"; the
+ *       {@code beforeTool} callback intercepts and blocks the call.</li>
+ * </ol>
+ *
+ * @see CallbacksDemoAgent
+ * @see DemoCallbacks
+ */
 public final class CallbacksDemoApp {
 
   // to be wired via application.properties, e.g.

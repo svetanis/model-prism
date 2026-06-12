@@ -21,20 +21,20 @@ import java.util.Optional;
  */
 public class GroqModelProvider implements ModelProvider {
 
+  /** No-arg constructor required by {@link java.util.ServiceLoader}. */
   public GroqModelProvider() {}
 
-  private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
-  private static final String PREFIX = "groq/";
-
   @Override
-  public String modelPattern() {
-    return "groq/.*";
+  public String prefix() {
+    return "groq";
   }
 
+  private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
+
+  /** {@inheritDoc} */
   @Override
-  public BaseLlm create(String modelName) {
+  public BaseLlm createFromBareModelName(String bareModelName) {
     Optional<String> apiKey = ofNullable(System.getenv("GROQ_API_KEY"));
-    String model = modelName.startsWith(PREFIX) ? modelName.substring(PREFIX.length()) : modelName;
-    return new OpenAiCompatibleLlm(model, API_URL, apiKey);
+    return new OpenAiCompatibleLlm(bareModelName, API_URL, apiKey);
   }
 }

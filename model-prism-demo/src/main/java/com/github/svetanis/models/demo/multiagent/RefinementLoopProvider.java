@@ -12,6 +12,23 @@ import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds a writer–critic {@link LoopAgent} for iterative article refinement.
+ *
+ * <p>The loop consists of two sub-agents:
+ * <ul>
+ *   <li><strong>Writer</strong> — drafts or revises an article based on research notes
+ *       and any critic feedback from the previous iteration.</li>
+ *   <li><strong>Critic</strong> — reviews the latest draft and provides actionable
+ *       improvement suggestions.</li>
+ * </ul>
+ *
+ * <p>The loop runs for a configurable number of iterations (default: 2). After the
+ * final iteration, the refined article is published to session state under the
+ * {@code final_article} key via an {@code afterAgent} callback.
+ *
+ * @see ContentPipelineProvider
+ */
 public final class RefinementLoopProvider implements Provider<LoopAgent> {
 
   private static final String CRITIQUE_INSTRUCTION =

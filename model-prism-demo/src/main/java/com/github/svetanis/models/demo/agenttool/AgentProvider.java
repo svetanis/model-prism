@@ -9,6 +9,15 @@ import com.google.adk.tools.AgentTool;
 import com.google.adk.tools.GoogleSearchAgentTool;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds a research-analyst {@link LlmAgent} equipped with
+ * a {@link GoogleSearchAgentTool} as a callable sub-agent tool.
+ *
+ * <p>The outer agent runs on a configurable model (e.g. Groq) while the inner
+ * search sub-agent always uses {@code gemini-2.5-flash} for Google Search grounding.
+ *
+ * @see AgentToolDemoApp
+ */
 public final class AgentProvider implements Provider<LlmAgent> {
 
   private static final String RESEARCH_INSTRUCTION =

@@ -31,6 +31,12 @@
             <artifactId>google-adk</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-vertex-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Model Prism Core (SPI + OpenAiCompatibleLlm) -->
         <dependency>
             <groupId>com.github.svetanis</groupId>

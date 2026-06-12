@@ -8,6 +8,20 @@ import com.google.adk.agents.SequentialAgent;
 import com.google.adk.tools.GoogleSearchTool;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that assembles a content-creation pipeline as a {@link SequentialAgent}.
+ *
+ * <p>The pipeline has two stages:
+ * <ol>
+ *   <li><strong>Researcher</strong> — a Gemini-powered agent with Google Search that
+ *       produces structured research notes and stores them in session state.</li>
+ *   <li><strong>Refinement loop</strong> — a {@link LoopAgent} where a writer drafts
+ *       an article and a critic provides feedback, iterating to refine the output.</li>
+ * </ol>
+ *
+ * @see RefinementLoopProvider
+ * @see MultiAgentDemoApp
+ */
 public final class ContentPipelineProvider implements Provider<SequentialAgent> {
 
   private static final String RESEARCH_INSTRUCTION =

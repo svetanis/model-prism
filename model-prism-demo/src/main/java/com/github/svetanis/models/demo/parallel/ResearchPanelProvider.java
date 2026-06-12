@@ -7,6 +7,17 @@ import com.google.adk.agents.ParallelAgent;
 import com.google.adk.tools.GoogleSearchTool;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds a {@link ParallelAgent} containing three domain-expert
+ * sub-agents: historian, scientist, and economist.
+ *
+ * <p>Each expert runs concurrently and writes its output to a distinct session-state key
+ * ({@code history_notes}, {@code science_notes}, {@code economics_notes}), making
+ * the results available to downstream agents in the pipeline. The scientist agent
+ * uses {@code gemini-2.5-flash} with Google Search for grounded answers.
+ *
+ * @see ReseachPipelineProvider
+ */
 public final class ResearchPanelProvider implements Provider<ParallelAgent> {
 
   public ResearchPanelProvider(String model) {

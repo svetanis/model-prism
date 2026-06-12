@@ -12,6 +12,17 @@ import com.github.svetanis.models.spi.ModelProvider;
 import com.github.svetanis.models.spi.ModelProviderRegistry;
 import java.util.List;
 
+/**
+ * Demo application for parallel agent execution with a research pipeline.
+ *
+ * <p>Launches three expert agents (historian, scientist, economist) in parallel via a
+ * {@link com.google.adk.agents.ParallelAgent}, then feeds their combined notes into a
+ * synthesizer agent that produces a unified briefing. Optionally filters output to show
+ * only the final synthesizer response (controlled by the {@code filter.event} system property).
+ *
+ * @see ReseachPipelineProvider
+ * @see ResearchPanelProvider
+ */
 public final class ParallelAgentDemo {
 
   // to be wired via application.properties, e.g.

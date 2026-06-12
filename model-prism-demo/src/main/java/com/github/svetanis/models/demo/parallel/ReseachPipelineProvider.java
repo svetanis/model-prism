@@ -10,6 +10,21 @@ import com.google.adk.agents.SequentialAgent;
 import io.reactivex.rxjava3.core.Single;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds the full research pipeline as a {@link SequentialAgent}.
+ *
+ * <p>The pipeline consists of two stages:
+ * <ol>
+ *   <li><strong>Research panel</strong> — a {@link ParallelAgent} that runs historian,
+ *       scientist, and economist agents concurrently, each producing notes stored
+ *       in session state.</li>
+ *   <li><strong>Synthesizer</strong> — an {@link LlmAgent} that reads all expert notes
+ *       from session state and produces a unified 3-paragraph briefing.</li>
+ * </ol>
+ *
+ * @see ResearchPanelProvider
+ * @see ParallelAgentDemo
+ */
 public class ReseachPipelineProvider implements Provider<SequentialAgent> {
 
   private static final String INSTRUCTION =

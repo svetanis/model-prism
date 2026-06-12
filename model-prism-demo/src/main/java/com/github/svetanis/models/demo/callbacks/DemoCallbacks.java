@@ -9,8 +9,22 @@ import com.google.adk.tools.ToolContext;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Callback implementations for the {@link CallbacksDemoAgent}.
+ *
+ * <p>Contains static methods that serve as before/after hooks for both model
+ * invocations and tool executions. The {@link #onBeforeTool} method doubles as
+ * a guardrail, blocking specific ticker symbols.
+ *
+ * @see CallbacksDemoAgent
+ */
 public class DemoCallbacks {
 
+  /**
+   * Logs agent and user metadata before the model is invoked.
+   *
+   * @return {@link Optional#empty()} to proceed with the model call
+   */
   protected static Optional<LlmResponse> onBeforeModel(
       CallbackContext ctx, LlmRequest.Builder requestBuilder) {
     String msg = " [CALLBACK] beforeModel -- agent=%s, userId=%s";
@@ -18,6 +32,11 @@ public class DemoCallbacks {
     return Optional.empty();
   }
 
+  /**
+   * Logs token usage statistics after a non-partial model response.
+   *
+   * @return {@link Optional#empty()} to use the original response
+   */
   protected static Optional<LlmResponse> onAfterModel(CallbackContext ctx, LlmResponse response) {
     boolean isPartial = response.partial().orElse(false);
     boolean turnComplete = response.turnComplete().orElse(false);
@@ -40,6 +59,12 @@ public class DemoCallbacks {
     return Optional.empty();
   }
 
+  /**
+   * Validates tool arguments before execution. Blocks the {@code "HACK"} ticker
+   * symbol as a guardrail demonstration.
+   *
+   * @return a map with an error message if blocked, or {@link Optional#empty()} to proceed
+   */
   protected static Optional<Map<String, Object>> onBeforeTool(
       InvocationContext ctx, BaseTool tool, Map<String, Object> args, ToolContext toolCtx) {
     String msg1 = " [CALLBACK] beforeTool -- tool=%s args=%s";
@@ -52,6 +77,11 @@ public class DemoCallbacks {
     return Optional.empty();
   }
 
+  /**
+   * Logs the tool name and result after execution.
+   *
+   * @return {@link Optional#empty()} to use the original result
+   */
   protected static Optional<Map<String, Object>> onAfterTool(
       InvocationContext ctx,
       BaseTool tool,

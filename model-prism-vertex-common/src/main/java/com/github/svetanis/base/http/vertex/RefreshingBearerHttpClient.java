@@ -15,6 +15,13 @@ import com.github.svetanis.base.http.OpenAiHttpClient;
 /** {@link OpenAiHttpClient} implementation backed by {@code java.net.http.HttpClient}. */
 public class RefreshingBearerHttpClient implements OpenAiHttpClient {
 
+  /**
+   * Creates a new client.
+   *
+   * @param http       the underlying {@link HttpClient} for sending requests
+   * @param apiUrl     the full URL of the chat-completions endpoint
+   * @param tokens     supplier that provides (and refreshes) OAuth2 bearer tokens
+   */
   public RefreshingBearerHttpClient(HttpClient http, String apiUrl, AccessTokenSupplier tokens) {
     this.http = checkNotNull(http, "http");
     this.apiUrl = checkNotNull(apiUrl, "apiUrl");
@@ -25,6 +32,7 @@ public class RefreshingBearerHttpClient implements OpenAiHttpClient {
   private final String apiUrl;
   private final AccessTokenSupplier tokens;
 
+  /** {@inheritDoc} */
   @Override
   public String get(String url) throws Exception {
     HttpRequest request = HttpRequest.newBuilder() //
@@ -40,6 +48,7 @@ public class RefreshingBearerHttpClient implements OpenAiHttpClient {
     return response.body();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String post(String requestBody) throws Exception {
     HttpRequest request = request(requestBody);
@@ -51,6 +60,7 @@ public class RefreshingBearerHttpClient implements OpenAiHttpClient {
     return response.body();
   }
 
+  /** {@inheritDoc} */
   @Override
   public Stream<String> postStream(String requestBody) throws Exception {
     HttpRequest request = request(requestBody);
@@ -63,6 +73,13 @@ public class RefreshingBearerHttpClient implements OpenAiHttpClient {
     return response.body();
   }
 
+  /**
+   * Builds a POST request with a refreshed bearer token in the {@code Authorization} header.
+   *
+   * @param body the JSON request body
+   * @return a ready-to-send {@link HttpRequest}
+   * @throws IOException if the token supplier fails to provide a token
+   */
   private HttpRequest request(String body) throws IOException {
     HttpRequest.Builder builder = HttpRequest.newBuilder() //
         .uri(URI.create(apiUrl)) //
@@ -72,6 +89,7 @@ public class RefreshingBearerHttpClient implements OpenAiHttpClient {
     return builder.build();
   }
 
+  /** Returns {@code true} if the HTTP status code is in the 2xx range. */
   private boolean success(HttpResponse<?> response) {
     return response.statusCode() >= 200 && response.statusCode() < 300;
   }

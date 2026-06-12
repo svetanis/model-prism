@@ -1,6 +1,6 @@
 package com.github.svetanis.models.vertex.gemini;
 
-import com.github.svetanis.models.spi.prefix.AbstractPrefixAwareModelProvider;
+import com.github.svetanis.models.spi.ModelProvider;
 import com.google.adk.models.BaseLlm;
 import com.google.adk.models.Gemini;
 import com.google.adk.models.VertexCredentials;
@@ -48,12 +48,19 @@ import com.google.adk.models.VertexCredentials;
  * <p>
  * All delegated to the underlying ADK {@link Gemini} implementation. This provider adds no behaviour of its own beyond
  * registration and prefix handling.
+ * 
+ * <p>
+ * Note that authentication and short-lived token generation are shared via the
+ * {@code model-prism-vertex-common} module to prevent duplicating Google Cloud dependencies.
  */
 
-public class VertexGeminiModelProvider extends AbstractPrefixAwareModelProvider {
+public class VertexGeminiModelProvider implements ModelProvider {
 
+  /**
+   * Constructs the provider and forces the
+   * {@code GOOGLE_GENAI_USE_VERTEXAI} system property to {@code true}.
+   */
   public VertexGeminiModelProvider() {
-    super("vertex-gemini/");
     // Defensive: ensure the google-genai SDK selects the Vertex transport even
     // if the host environment has GOOGLE_API_KEY set. System properties take
     // precedence over env vars for the SDK's configuration lookup.
@@ -61,7 +68,13 @@ public class VertexGeminiModelProvider extends AbstractPrefixAwareModelProvider 
   }
 
   @Override
-  protected BaseLlm createFromBareModelName(String bareModelName) {
+  public String prefix() {
+    return "vertex-gemini";
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public BaseLlm createFromBareModelName(String bareModelName) {
     // ADK's Gemini class reads project/location/credentials from the environment.
     // No constructor-level overrides are exposed here - see the class-level Javadoc
     // for the rationale. The explicit (VertexCredentials) null disambiguates from

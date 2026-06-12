@@ -96,7 +96,11 @@ use this proposed solution for the common case where you want zero-boilerplate m
 | model-prism-groq/ | Groq JAR (its own META-INF/services) |
 | model-prism-ollama/ | Ollama JAR (its own META-INF/services) |
 | model-prism-openrouter/ | OpenRouter JAR (its own META-INF/services)|
+| model-prism-vertex-common/ | Shared HTTP/Auth logic for Vertex AI providers |
+| model-prism-vertex-gemini/ | Vertex Gemini JAR (its own META-INF/services) |
+| model-prism-vertex-openai/ | Vertex OpenAI JAR (its own META-INF/services) |
 | model-prism-demo/	| DemoApp - zero provider wiring code |
+| model-prism-web/ | Spring Boot Web App showing ChatService interface decoupling and SSE |
 
 
 Each provider is its own Maven artifact. The demo depends only on `model-prism-core` 
@@ -109,7 +113,11 @@ in `DemoApp`.
 | `model-prism-groq` | `model-prism-groq` | [model-prism-groq/README.md](model-prism-groq/README.md) |
 | `model-prism-ollama` | `model-prism-ollama` | [model-prism-ollama/README.md](model-prism-ollama/README.md) |
 | `model-prism-openrouter` | `model-prism-openrouter` | [model-prism-openrouter/README.md](model-prism-openrouter/README.md) |
+| `model-prism-vertex-common` | `model-prism-vertex-common` | [model-prism-vertex-common/README.md](model-prism-vertex-common/README.md) |
+| `model-prism-vertex-gemini` | `model-prism-vertex-gemini` | [model-prism-vertex-gemini/README.md](model-prism-vertex-gemini/README.md) |
+| `model-prism-vertex-openai` | `model-prism-vertex-openai` | [model-prism-vertex-openai/README.md](model-prism-vertex-openai/README.md) |
 | `model-prism-demo` | `model-prism-demo` | [model-prism-demo/README.md](model-prism-demo/README.md) |
+| `model-prism-web` | `model-prism-web` | [model-prism-web/README.md](model-prism-web/README.md) |
 
 ---
 
@@ -159,6 +167,16 @@ model: openrouter/auto
 Requires `OPENROUTER_API_KEY`. Sign up: https://openrouter.ai
 See [model-prism-openrouter/README.md](model-prism-openrouter/README.md) for model list.
 
+### Vertex AI (Gemini and partner models)
+
+```yaml
+model: vertex-gemini/gemini-2.5-flash
+# or
+model: vertex-openai/gemini-2.5-flash
+```
+Requires `GOOGLE_CLOUD_PROJECT` environment variable and Google Cloud configuration.
+See [model-prism-vertex-gemini/README.md](model-prism-vertex-gemini/README.md) or [model-prism-vertex-openai/README.md](model-prism-vertex-openai/README.md) for details.
+
 ---
 
 ## Other Compatible Providers
@@ -203,15 +221,13 @@ Any service that speaks `POST /v1/chat/completions` works as a one-liner subclas
 ```java
 public class MyProviderModelProvider implements ModelProvider {
 
-  private static final String PREFIX = "myprovider/";
   private static final String API_URL = "https://api.myprovider.com/v1/chat/completions";
 
-  @Override public String modelPattern() {return "myprovider/.*";}
+  @Override public String prefix() { return "myprovider"; }
 
-  @Override public BaseLlm create(String modelName) {
+  @Override public BaseLlm createFromBareModelName(String bareModelName) {
     Optional<String> apiKey = Optional.ofNullable(System.getenv("MY_PROVIDER_API_KEY"));
-    String model = modelName.startsWith(PREFIX) ? modelName.substring(PREFIX.length()) : modelName;
-    return new OpenAiCompatibleLlm(model, API_URL, apiKey);
+    return new OpenAiCompatibleLlm(bareModelName, API_URL, apiKey);
   }
 }
 ```
@@ -478,6 +494,8 @@ META-INF/services/com.github.svetanis.models.spi.ModelProvider
 	|-- model-prism-groq.jar       -> com.github.svetanis.models.groq.GroqModelProvider
 	|-- model-prism-ollama.jar     -> com.github.svetanis.models.ollama.OllamaModelProvider
 	|-- model-prism-openrouter.jar -> com.github.svetanis.models.openrouter.OpenRouterModelProvider
+	|-- model-prism-vertex-gemini.jar -> com.github.svetanis.models.vertex.gemini.VertexGeminiModelProvider
+	|-- model-prism-vertex-openai.jar -> com.github.svetanis.models.vertex.openai.VertexOpenAiModelProvider
 ```
 
 At runtime:

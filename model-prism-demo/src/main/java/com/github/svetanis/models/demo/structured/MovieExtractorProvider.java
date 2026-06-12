@@ -6,6 +6,16 @@ import com.google.adk.agents.LlmAgent;
 import com.google.genai.types.Schema;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds a data-extraction {@link LlmAgent} configured with
+ * an {@link com.google.genai.types.Schema}-based output schema for structured movie facts.
+ *
+ * <p>The agent extracts typed fields (title, director, year, genre, summary) from
+ * free-form movie descriptions and returns them as JSON conforming to the supplied schema.
+ *
+ * @see MovieSchemaProvider
+ * @see StructuredOutputDemoApp
+ */
 public final class MovieExtractorProvider implements Provider<LlmAgent> {
 
   private static final String INSTRUCTION =

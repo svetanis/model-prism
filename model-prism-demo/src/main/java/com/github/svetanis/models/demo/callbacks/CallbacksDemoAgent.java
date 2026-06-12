@@ -8,6 +8,17 @@ import com.github.svetanis.models.demo.tools.DemoTools;
 import com.google.adk.tools.FunctionTool;
 import jakarta.inject.Provider;
 
+/**
+ * {@link Provider} that builds a stock-price assistant {@link LlmAgent} wired with
+ * all four callback hooks: {@code beforeModel}, {@code afterModel}, {@code beforeTool},
+ * and {@code afterTool}.
+ *
+ * <p>The {@code beforeTool} callback acts as a guardrail, blocking requests for
+ * the ticker symbol {@code "HACK"} to demonstrate input validation.
+ *
+ * @see DemoCallbacks
+ * @see CallbacksDemoApp
+ */
 public final class CallbacksDemoAgent implements Provider<LlmAgent> {
 
   private static final String INSTRUCTION =

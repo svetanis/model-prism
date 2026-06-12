@@ -6,6 +6,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Collection of stub tool functions exposed to ADK agents via {@link com.google.adk.tools.FunctionTool}.
+ *
+ * <p>All functions return static/mock data and are intended for demo and testing purposes only.
+ * In production, these would be replaced with calls to real APIs (weather services,
+ * stock-market feeds, etc.).
+ *
+ * <p>Available tools:
+ * <ul>
+ *   <li>{@code getCurrentTime} — returns the current server time and timezone</li>
+ *   <li>{@code getWeather} — returns stubbed weather for a given city</li>
+ *   <li>{@code calculate} — performs basic arithmetic (add, subtract, multiply, divide)</li>
+ *   <li>{@code lookupStockPrice} — returns mock stock prices for known tickers</li>
+ *   <li>{@code lookupFacts} — returns stubbed facts about a topic</li>
+ * </ul>
+ *
+ * @see ToolsDemoApp
+ * @see com.github.svetanis.models.demo.callbacks.CallbacksDemoAgent
+ */
 public class DemoTools {
 
   private static final String TOPIC =

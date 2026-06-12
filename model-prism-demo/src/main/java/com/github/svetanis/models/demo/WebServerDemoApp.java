@@ -8,6 +8,15 @@ import com.github.svetanis.models.spi.ModelProviderRegistry;
 import com.google.adk.web.AdkWebServer;
 import java.util.List;
 
+/**
+ * Web server demo launching the ADK dev UI with a model-prism-backed agent.
+ *
+ * <p>Uses {@link com.google.adk.web.AdkWebServer#start} to start the built-in
+ * development web server, providing a browser-based chat UI for interacting
+ * with the agent. All model-prism providers are registered before the server starts.
+ *
+ * @see DemoRunner#showProviders
+ */
 public final class WebServerDemoApp {
 
   // to be wired via application.properties, e.g.

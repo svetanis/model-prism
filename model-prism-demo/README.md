@@ -129,10 +129,12 @@ model-prism-demo
     |--model-prism-groq                    (GroqModelProvider + META-INF/services)
     |--model-prism-ollama                  (OllamaModelProvider + META-INF/services)
     |--model-prism-openrouter              (OpenRouterModelProvider + META-INF/services)
+    |--model-prism-vertex-gemini           (VertexGeminiModelProvider + META-INF/services)
+    |--model-prism-vertex-openai           (VertexOpenAiModelProvider + META-INF/services)
         |--model-prism-core (transitive)
 ```
 
-The three provider modules are independent of each other. Remove any one and the remaining providers
+The provider modules are independent of each other. Remove any one and the remaining providers
 still register and work. The demo itself has no dependency on any provider class - it only imports `model-prism-core`
 
 The MCP SDK (`io.modelcontextprotocol.sdk:mcp`) is a transitive dependency via `google-adk` -

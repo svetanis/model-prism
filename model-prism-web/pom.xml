@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.github.svetanis</groupId>
+        <artifactId>model-prism</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>model-prism-web</artifactId>
+    <name>Model Prism Web</name>
+    <description>
+		Spring Boot web layer that wraps ADK Runner directly.
+		Demonstrates how to:
+		- Configure Runner as a Spring bean
+		- Stream agent events via SSE (Server-Sent Events)
+		- Filter the event stream so only the synthesizer's
+		output reaches the browser
+		AdkWebServer (google-adk-dev) is a debug-only tool
+		that owns the runner internally and cannot be filtered.
+	</description>
+    <properties>
+        <jackson.version>2.17.0</jackson.version>
+		<jakarta.inject.version>2.0.1</jakarta.inject.version>
+		<spring.boot.version>3.5.3</spring.boot.version>
+		<maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <apache.commons.lang3.version>3.20.0</apache.commons.lang3.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- The ADK core dependency -->
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.adk</groupId>
+            <artifactId>google-adk-dev</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-openrouter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-groq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.svetanis</groupId>
+            <artifactId>model-prism-ollama</artifactId>
+        </dependency>        
+		<dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <scope>compile</scope>
+        </dependency>      
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>compile</scope>
+        </dependency>  
+		<dependency>
+      		<groupId>org.springframework.boot</groupId>
+      		<artifactId>spring-boot-starter-web</artifactId>
+      		<version>${spring.boot.version}</version>
+		</dependency>
+    </dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.plugin.version}</version>
+					<configuration>
+						<compilerArgs>
+			                <arg>-parameters</arg>
+						</compilerArgs>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring.boot.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
