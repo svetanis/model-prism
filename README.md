@@ -543,7 +543,7 @@ Each provider JAR is fully self-contained and independently deployable.
 Three files from `model-prism-core` would go into `google-adk.jar`
 - `ModelProvider.java` - public SPI interface
 - `ModelProviderRegistry.java` - ServiceLoader wiring
-- `OpenAiCompatibleLlm.java` - reusable base class for Open-AI-format APIs
+- `AdkNativeOpenAiLlm.java` - reusable base class for Open-AI-format APIs
 
 First integration point: `Runner`
 
