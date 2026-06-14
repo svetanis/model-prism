@@ -4,20 +4,23 @@ import static com.github.svetanis.models.demo.DemoRunner.run;
 import static com.github.svetanis.models.demo.DemoRunner.showAgent;
 import static com.github.svetanis.models.demo.DemoRunner.showProviders;
 
-import com.google.adk.agents.LlmAgent;
+import java.util.List;
+
+import com.github.svetanis.models.demo.DemoRunner;
 import com.github.svetanis.models.spi.ModelProvider;
 import com.github.svetanis.models.spi.ModelProviderRegistry;
-import java.util.List;
+import com.google.adk.agents.LlmAgent;
 
 /**
  * Demo application for ADK agent callbacks (before/after model and tool hooks).
  *
- * <p>Runs two scenarios:
+ * <p>
+ * Runs two scenarios:
  * <ol>
- *   <li><strong>Normal flow</strong> — asks for stock prices of AAPL and MSFT;
- *       all callbacks fire and the tool returns mock prices.</li>
- *   <li><strong>Guardrail block</strong> — asks for ticker "HACK"; the
- *       {@code beforeTool} callback intercepts and blocks the call.</li>
+ * <li><strong>Normal flow</strong> — asks for stock prices of AAPL and MSFT;
+ * all callbacks fire and the tool returns mock prices.</li>
+ * <li><strong>Guardrail block</strong> — asks for ticker "HACK"; the
+ * {@code beforeTool} callback intercepts and blocks the call.</li>
  * </ol>
  *
  * @see CallbacksDemoAgent
@@ -25,23 +28,20 @@ import java.util.List;
  */
 public final class CallbacksDemoApp {
 
-  // to be wired via application.properties, e.g.
-  // "ollama/llama3", "groq/llama-3.1-8b-instant", "gemini-2.5-flash", "openrouter/auto"
-  private static final String MODEL = "groq/llama-3.1-8b-instant";
+	public static void main(String[] args) {
+		// One call - discovers and registers ALL providers on the classpath
+		List<ModelProvider> registered = ModelProviderRegistry.registerAll();
+		showProviders(registered);
+		LlmAgent agent = new CallbacksDemoAgent(DemoRunner.MODEL).get();
+		// -- Run 1: normal flow -------------------------------------
+		String prompt1 = "What are the current prices of AAPL and MSFT?";
+		showAgent(agent, prompt1);
+		run(agent, prompt1);
 
-  public static void main(String[] args) {
-    // One call - discovers and registers ALL providers on the classpath
-    List<ModelProvider> registered = ModelProviderRegistry.registerAll();
-    showProviders(registered);
-    LlmAgent agent = new CallbacksDemoAgent(MODEL).get();
-    // -- Run 1: normal flow -------------------------------------
-    String prompt1 = "What are the current prices of AAPL and MSFT?";
-    showAgent(agent, prompt1);
-    run(agent, prompt1);
-
-    // -- Run 2: guardrail blocks the tool call -------------------------------------
-    String prompt2 = "What is the price of HACK?";
-    showAgent(agent, prompt2);
-    run(agent, prompt2);
-  }
+		// -- Run 2: guardrail blocks the tool call
+		// -------------------------------------
+		String prompt2 = "What is the price of HACK?";
+		showAgent(agent, prompt2);
+		run(agent, prompt2);
+	}
 }

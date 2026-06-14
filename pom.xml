@@ -1,211 +1,218 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.svetanis</groupId>
-    <artifactId>model-prism</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<groupId>com.github.svetanis</groupId>
+	<artifactId>model-prism</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-    <name>Model Prism</name>
-    <description>
-        Pluggable LLM backends for Google ADK Java via the Java ServiceLoader SPI pattern.
-        Demonstrates how pluggable model providers could work via Java ServiceLoader,
-        making it trivial to swap LLM backends without modifying ADK core.
-        Each provider ships as its own JAR - drop one on the classpath and it
-        auto-registers. No code changes required.
-    </description>
-    <url>https://github.com/svetanis/model-prism</url>
+	<name>Model Prism</name>
+	<description>
+		Pluggable LLM backends for Google ADK Java via the Java ServiceLoader
+		SPI pattern.
+		Demonstrates how pluggable model providers could work via Java
+		ServiceLoader,
+		making it trivial to swap LLM backends without modifying ADK core.
+		Each provider ships as its own JAR - drop one on the classpath and it
+		auto-registers. No code changes required.
+	</description>
+	<url>https://github.com/svetanis/model-prism</url>
 
-    <modules>
-        <module>model-prism-core</module>
-        <module>model-prism-groq</module>
-        <module>model-prism-ollama</module>
-        <module>model-prism-openrouter</module>
-        <module>model-prism-demo</module>
-        <module>model-prism-web</module>
-        <module>model-prism-vertex-common</module>
-        <module>model-prism-vertex-gemini</module>
-        <module>model-prism-vertex-openai</module>
-    </modules>
+	<modules>
+		<module>model-prism-core</module>
+		<module>model-prism-groq</module>
+		<module>model-prism-ollama</module>
+		<module>model-prism-openrouter</module>
+		<module>model-prism-demo</module>
+		<module>model-prism-web</module>
+		<module>model-prism-vertex-common</module>
+		<module>model-prism-vertex-gemini</module>
+		<module>model-prism-vertex-openai</module>
+	</modules>
 
-    <properties>
-        <!-- Java -->
-        <java.version>25</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<properties>
+		<!-- Java -->
+		<java.version>25</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- Google ADK -->
-        <google.adk.version>1.4.0</google.adk.version>
+		<!-- Google ADK -->
+		<google.adk.version>1.4.0</google.adk.version>
+		<!--<google.adk.version>1.4.1-SNAPSHOT</google.adk.version>-->
 
-        <!-- Jackson -->
-        <!-- Jackson — must align with the jackson-annotations version that
+		<!-- Jackson -->
+		<!-- Jackson — must align with the jackson-annotations version that
              google-adk:1.2.0 pulls in transitively (2.20).
              Using a newer jackson-databind here would bring in jackson-annotations 2.21.x
              which conflicts at runtime. -->
-        <jackson.version>2.20.0</jackson.version>
+		<jackson.version>2.20.0</jackson.version>
 
-        <!-- Jakarta -->
-        <jakarta.inject.version>2.0.1</jakarta.inject.version>
+		<!-- Jakarta -->
+		<jakarta.inject.version>2.0.1</jakarta.inject.version>
 
-        <!-- Guava -->
-        <guava.version>33.6.0-jre</guava.version>
+		<!-- Guava -->
+		<guava.version>33.6.0-jre</guava.version>
 		<google.auth>1.30.0</google.auth>
 
-        <!-- Apache Commons -->
-        <commons.lang3.version>3.20.0</commons.lang3.version>
+		<!-- Apache Commons -->
+		<commons.lang3.version>3.20.0</commons.lang3.version>
 
-        <!-- Test -->
-        <junit.jupiter.version>6.1.0</junit.jupiter.version>
-        <mockito.version>5.23.0</mockito.version>
-        <assertj.version>3.27.7</assertj.version>
+		<!-- Test -->
+		<junit.jupiter.version>6.1.0</junit.jupiter.version>
+		<mockito.version>5.23.0</mockito.version>
+		<assertj.version>3.27.7</assertj.version>
 
-        <!-- Plugins -->
-        <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
-        <exec.maven.plugin.version>3.5.0</exec.maven.plugin.version>
-        <maven.surefire.plugin.version>3.5.3</maven.surefire.plugin.version>
-    </properties>
+		<!-- Plugins -->
+		<maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
+		<exec.maven.plugin.version>3.5.0</exec.maven.plugin.version>
+		<maven.surefire.plugin.version>3.5.3</maven.surefire.plugin.version>
+	</properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- Google ADK core -->
-            <dependency>
-                <groupId>com.google.adk</groupId>
-                <artifactId>google-adk</artifactId>
-                <version>${google.adk.version}</version>
-            </dependency>
-            <!-- Google ADK Dev (web server / UI tooling) -->
-            <dependency>
-                <groupId>com.google.adk</groupId>
-                <artifactId>google-adk-dev</artifactId>
-                <version>${google.adk.version}</version>
-            </dependency>
-			
-					
-            <dependency>
-                <groupId>com.google.auth</groupId>
-                <artifactId>google-auth-library-oauth2-http</artifactId>
-			    <version>${google.auth}</version>
-            </dependency>
+	<dependencyManagement>
+		<dependencies>
+			<!-- Google ADK core -->
+			<dependency>
+				<groupId>com.google.adk</groupId>
+				<artifactId>google-adk</artifactId>
+				<version>${google.adk.version}</version>
+			</dependency>
+			<!-- Google ADK Dev (web server / UI tooling) -->
+			<dependency>
+				<groupId>com.google.adk</groupId>
+				<artifactId>google-adk-dev</artifactId>
+				<version>${google.adk.version}</version>
+			</dependency>
 
 
-            <!-- Inter-module dependencies -->
-            <dependency>
-                <groupId>com.github.svetanis</groupId>
-                <artifactId>model-prism-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.svetanis</groupId>
-                <artifactId>model-prism-groq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.svetanis</groupId>
-                <artifactId>model-prism-ollama</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.svetanis</groupId>
-                <artifactId>model-prism-openrouter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>com.google.auth</groupId>
+				<artifactId>google-auth-library-oauth2-http</artifactId>
+				<version>${google.auth}</version>
+			</dependency>
 
-            <!-- JSON -->
-            <!-- Source: https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
 
-            <!-- Jakarta Dependency Injection -->
-            <!-- Source: https://mvnrepository.com/artifact/jakarta.inject/jakarta.inject-api -->
-            <dependency>
-                <groupId>jakarta.inject</groupId>
-                <artifactId>jakarta.inject-api</artifactId>
-                <version>${jakarta.inject.version}</version>
-            </dependency>
+			<!-- Inter-module dependencies -->
+			<dependency>
+				<groupId>com.github.svetanis</groupId>
+				<artifactId>model-prism-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.svetanis</groupId>
+				<artifactId>model-prism-groq</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.svetanis</groupId>
+				<artifactId>model-prism-ollama</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.svetanis</groupId>
+				<artifactId>model-prism-openrouter</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
-            <!-- Guava -->
-            <!-- Source: https://mvnrepository.com/artifact/com.google.guava/guava -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
+			<!-- JSON -->
+			<!-- Source:
+			https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
 
-            <!-- Apache Commons Lang -->
-            <!-- Source: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons.lang3.version}</version>
-            </dependency>
+			<!-- Jakarta Dependency Injection -->
+			<!-- Source:
+			https://mvnrepository.com/artifact/jakarta.inject/jakarta.inject-api -->
+			<dependency>
+				<groupId>jakarta.inject</groupId>
+				<artifactId>jakarta.inject-api</artifactId>
+				<version>${jakarta.inject.version}</version>
+			</dependency>
 
-            <!-- Test dependencies -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-core</artifactId>
-                <version>${assertj.version}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+			<!-- Guava -->
+			<!-- Source:
+			https://mvnrepository.com/artifact/com.google.guava/guava -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.plugin.version}</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven.surefire.plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <version>${exec.maven.plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+			<!-- Apache Commons Lang -->
+			<!-- Source:
+			https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons.lang3.version}</version>
+			</dependency>
+
+			<!-- Test dependencies -->
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>${junit.jupiter.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.plugin.version}</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven.surefire.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>${exec.maven.plugin.version}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>

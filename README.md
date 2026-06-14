@@ -409,10 +409,14 @@ Recommended search APIs for LLM agents: **Tavily** (free tier, designed for agen
 | `StreamingDemoApp` | SSE token-by-token streaming - partial events printed inline as they arrive | - |
 | `ToolsDemoApp` | Three `FunctionTool`s (`getCurrentTime`, `getWeather`, `calculate`) wired to a live agent | - |
 | `AgentToolDemoApp` | `GoogleSearchAgentTool`: Groq outer agent delegates live search to a Gemini sub-agent | GEMINI_API_KEY | 
-| `McpStdioDemoApp` | MCP filesystem tools via `@modelcontextprotocol/server-filesystem` (stdio) | Node.js + npx |
-| `StructuredDemoApp` | `outputSchema` - agent extracts typed JSON (`title`, `director`, `year`, `genre`, `summary`) from a free-text movie blurb | - |
-| `ParallelAgentDemoApp` | `ParallelAgent` - historian, scientiest, and economist run concurrently on one topic | - |
+| `HitlEscalationDemoApp` | Human-in-the-Loop PR Approval demo - pauses execution on sensitive actions (e.g. pom.xml changes) | - |
+| `McpDemoApp` | MCP filesystem tools via `@modelcontextprotocol/server-filesystem` (stdio) | Node.js + npx |
+| `McpSseDemoApp` | Remote MCP SSE connection via `SseServerParameters` (e.g. GitHub Copilot MCP) | COPILOT_GITHUB_TOKEN |
+| `SkillSourceDemoApp` | Dynamic tool loading via `SkillSource` - lists and loads available skills at runtime | - |
+| `StructuredOutputDemoApp` | `outputSchema` - agent extracts typed JSON (`title`, `director`, `year`, `genre`, `summary`) from a free-text movie blurb | - |
+| `ParallelAgentDemoApp` | `ParallelAgent` - historian, scientist, and economist run concurrently on one topic | - |
 | `MultiAgentDemoApp` | `SequentialAgent` + `LoopAgent` : researcher -> (writer <-> critic x2); shows `outputKey` + `Instruction.Provider` for inter-agent state passing | GEMINI_API_KEY |
+| `ObservabilityDemoApp` | Emits generalized observability telemetry to BigQuery (via Console in demo) | - |
 | `CallbacksDemoApp` | `beforeModel`, `afterModel`, `beforeTool`, `afterTool` lifecycle callbacks; includes a guardrail that short-circuits the tool call | - |
 | `WebServerDemoApp` | ADK Dev web server (`AdkWebServer`) - chat via browser at `http://localhost:8080` | - |
 
@@ -453,17 +457,29 @@ mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.
 # AgentTool-calling demo - Groq -> GoogleSearchAgentTool -> Gemini (requires GEMINI_API_KEY)
 mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.agenttool.AgentToolDemoApp"
 
-# MCP demo via npx/filesystem (requires Node.js)
-mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpStdioDemoApp"
+# MCP local Stdio demo via npx/filesystem (requires Node.js)
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpDemoApp"
+
+# MCP remote SSE demo (requires COPILOT_GITHUB_TOKEN)
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpSseDemoApp"
+
+# SkillSource dynamic loading demo
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.skills.SkillSourceDemoApp"
 
 # Structured output demo - typed JSON extracted from a movie blurb
 mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.structured.StructuredOutputDemoApp"
 
 # Parallel Agent Demo - historian, scientist, economist run concurrently
-mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.parallel.ParallelDemoApp"
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.parallel.ParallelAgentDemoApp"
 
 # Multi-agent pipeline demo (SequentialAgent: researcher -> (writer <-> critic x2)
 mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.multiagent.MultiAgentDemoApp"
+
+# Human in the Loop (HITL) PR Approval Demo
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.hitl.HitlEscalationDemoApp"
+
+# Observability BigQuery / Console plugin demo
+mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.observability.ObservabilityDemoApp"
 
 # Callbacks demo - beforeModel, afterModel, beforeTool, afterTool; guardrail example
 mvn -pl model-prism-demo exec:java "-Dexec.mainClass=com.github.svetanis.models.demo.callbacks.CallbacksDemoApp"
@@ -483,10 +499,14 @@ mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.d
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.StreamingDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.tools.ToolsDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.agenttool.AgentToolDemoApp
-mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpStdioDemoApp
+mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.hitl.HitlEscalationDemoApp
+mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpDemoApp
+mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.mcp.McpSseDemoApp
+mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.skills.SkillSourceDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.structured.StructuredOutputDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.parallel.ParallelAgentDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.multiagent.MultiAgentDemoApp
+mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.observability.ObservabilityDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.callbacks.CallbacksDemoApp
 mvn -pl model-prism-demo exec:java -Dexec.mainClass=com.github.svetanis.models.demo.WebServerDemoApp
 ```

@@ -174,7 +174,7 @@ import java.util.function.Function;
         node.set(
             PARAMETERS, normalizeSchemaTypes(MAPPER.readTree(decl.parameters().get().toJson())));
       } else {
-        node.putObject(PARAMETERS).put(TYPE, OBJECT);
+        node.putObject(PARAMETERS).put(TYPE, OBJECT).set("properties", MAPPER.createObjectNode());
       }
     } catch (Exception e) {
       throw new IllegalArgumentException("Failed to serialize tool declaration: " + decl.name(), e);
@@ -192,8 +192,11 @@ import java.util.function.Function;
       ObjectNode obj = (ObjectNode) node;
       if (obj.has(TYPE)) {
         obj.put(TYPE, obj.get(TYPE).asText().toLowerCase());
+        if (OBJECT.equals(obj.get(TYPE).asText()) && !obj.has("properties")) {
+          obj.set("properties", MAPPER.createObjectNode());
+        }
       }
-      obj.fields().forEachRemaining(entry -> normalizeSchemaTypes(entry.getValue()));
+      obj.properties().forEach(entry -> normalizeSchemaTypes(entry.getValue()));
     } else if (node.isArray()) {
       node.forEach(child -> normalizeSchemaTypes(child));
     }

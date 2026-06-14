@@ -109,7 +109,7 @@ class OpenAiRequestMapper {
         FunctionDeclaration decl = declOpt.get();
         JsonNode params = decl.parameters().isPresent() 
             ? normalizeSchemaTypes(mapper.readTree(decl.parameters().get().toJson()))
-            : mapper.createObjectNode().put("type", "object");
+            : mapper.createObjectNode().put("type", "object").set("properties", mapper.createObjectNode());
 
         tools.add(new OpenAiTool("function", new OpenAiFunction(
             decl.name().orElse(""), decl.description().orElse(""), params
@@ -124,7 +124,11 @@ class OpenAiRequestMapper {
       ObjectNode obj = (ObjectNode) node;
       if (obj.has("type")) {
         obj.put("type", obj.get("type").asText().toLowerCase());
+        if ("object".equals(obj.get("type").asText()) && !obj.has("properties")) {
+          obj.set("properties", mapper.createObjectNode());
+        }
       }
+      // Generically traverse ALL fields to find nested schemas (e.g. inside "items" or "properties")
       obj.properties().forEach(entry -> normalizeSchemaTypes(entry.getValue()));
     } else if (node.isArray()) {
       node.forEach(child -> normalizeSchemaTypes(child));
